@@ -40,12 +40,22 @@ const salaryRangesList = [
   },
 ]
 
+const locationsList = [
+  {locationId: 'HYDERABAD', location: 'Hyderabad'},
+  {locationId: 'BANGALORE', location: 'Bangalore'},
+  {locationId: 'CHENNAI', location: 'Chennai'},
+  {locationId: 'DELHI', location: 'Delhi'},
+  {locationId: 'MUMBAI', location: 'Mumbai'},
+]
+
 const FilterGroup = props => {
   const {
     employmentType,
     minimumPackage,
     updateEmploymentType,
     updateMinimumPackage,
+    selectedLocations,
+    updateSelectedLocations,
     onClearFilters,
   } = props
 
@@ -107,6 +117,29 @@ const FilterGroup = props => {
               className="filter-label-text"
             >
               {salaryRangeDetails.label}
+            </label>
+          </li>
+        ))}
+      </ul>
+
+      <hr className="hr-line" />
+
+      <h1 className="list-heading">Locations</h1>
+      <ul className="filter-list-container">
+        {locationsList.map(locationDetails => (
+          <li key={locationDetails.locationId} className="filter-list-item">
+            <input
+              type="checkbox"
+              id={locationDetails.locationId}
+              onChange={() => updateSelectedLocations(locationDetails.location)}
+              checked={selectedLocations.includes(locationDetails.location)}
+              className="filter-list-input"
+            />
+            <label
+              htmlFor={locationDetails.locationId}
+              className="filter-label-text"
+            >
+              {locationDetails.location}
             </label>
           </li>
         ))}

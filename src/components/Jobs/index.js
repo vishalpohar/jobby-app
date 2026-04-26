@@ -24,6 +24,7 @@ class Jobs extends Component {
     jobsList: [],
     employmentType: [],
     minimumPackage: '',
+    selectedLocations: [],
     searchQuery: '',
     apiStatus: apiStatusConstants.initial,
   }
@@ -90,6 +91,20 @@ class Jobs extends Component {
     }
   }
 
+  updateSelectedLocations = location => {
+    const {selectedLocations} = this.state
+    if (selectedLocations.includes(location)) {
+      const updatedSelectedLocations = selectedLocations.filter(
+        loc => loc !== location,
+      )
+      this.setState({selectedLocations: updatedSelectedLocations})
+    } else {
+      this.setState(prev => ({
+        selectedLocations: [...prev.selectedLocations, location],
+      }))
+    }
+  }
+
   updateMinimumPackage = minimumPackage => {
     this.setState({minimumPackage}, this.fetchJobs)
   }
@@ -122,11 +137,17 @@ class Jobs extends Component {
   )
 
   renderJobsSuccess = () => {
-    const {jobsList} = this.state
+    const {jobsList, selectedLocations} = this.state
+    let filteredJobsList = jobsList
+    if (selectedLocations.length > 0) {
+      filteredJobsList = filteredJobsList.filter(item =>
+        selectedLocations.includes(item.location),
+      )
+    }
 
     return (
       <ul className="jobs-list-container">
-        {jobsList.map(jobDetails => (
+        {filteredJobsList.map(jobDetails => (
           <JobItem key={jobDetails.id} jobDetails={jobDetails} />
         ))}
       </ul>
@@ -188,28 +209,11 @@ class Jobs extends Component {
     }
 
     const {searchQuery, employmentType, minimumPackage} = this.state
+    const {selectedLocations} = this.state
 
     return (
       <>
         <Header />
-        <div className="search-container search-container-sm">
-          <input
-            className="search-input-element"
-            type="search"
-            value={searchQuery}
-            onChange={this.changeSearchQuery}
-            onKeyDown={this.onEnterSearch}
-            placeholder="Search"
-          />
-          <button
-            type="button"
-            data-testid="searchButton"
-            className="search-button"
-            onClick={this.onSearch}
-          >
-            <BsSearch className="search-icon" />
-          </button>
-        </div>
         <div className="jobs-container">
           <FilterGroup
             employmentType={employmentType}
@@ -217,10 +221,12 @@ class Jobs extends Component {
             updateEmploymentType={this.updateEmploymentType}
             updateMinimumPackage={this.updateMinimumPackage}
             updateSearchQuery={this.updateSearchQuery}
+            selectedLocations={selectedLocations}
+            updateSelectedLocations={this.updateSelectedLocations}
             onClearFilters={this.onClearFilters}
           />
-          <div className="jobs-posts-container">
-            <div className="search-container search-container-lg">
+          <div className="jobs-section">
+            <div className="search-container search-container-sm">
               <input
                 className="search-input-element"
                 type="search"
@@ -238,7 +244,27 @@ class Jobs extends Component {
                 <BsSearch className="search-icon" />
               </button>
             </div>
-            {this.renderJobs()}
+            <div className="jobs-posts-container">
+              <div className="search-container search-container-lg">
+                <input
+                  className="search-input-element"
+                  type="search"
+                  value={searchQuery}
+                  onChange={this.changeSearchQuery}
+                  onKeyDown={this.onEnterSearch}
+                  placeholder="Search"
+                />
+                <button
+                  type="button"
+                  data-testid="searchButton"
+                  className="search-button"
+                  onClick={this.onSearch}
+                >
+                  <BsSearch className="search-icon" />
+                </button>
+              </div>
+              {this.renderJobs()}
+            </div>
           </div>
         </div>
       </>
