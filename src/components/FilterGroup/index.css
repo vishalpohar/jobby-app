@@ -1,0 +1,52 @@
+.filter-group-container {
+  min-width: 360px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+@media screen and (min-width: 786px) {
+  .filter-group-container {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+.list-heading {
+  color: #ffffff;
+  font-size: 24px;
+  margin: 4px 0;
+}
+
+.filter-list-container {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+}
+
+.filter-list-item {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.filter-label-text {
+  color: #ffffff;
+}
+
+.hr-line {
+  width: 100%;
+  background-color: #2c364c;
+}
+
+.clear-filter-btn {
+  background-color: transparent;
+  color: #6366f1;
+  font-weight: bold;
+  border: 0px;
+  outline: none;
+  margin-top: 10px;
+  cursor: pointer;
+}
